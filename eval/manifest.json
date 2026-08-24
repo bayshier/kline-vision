@@ -1,0 +1,17 @@
+{
+  "description": "kline-vision 合成形态评测集：标签由构造保证（ground truth exact）",
+  "samples": [
+    {"file": "head_and_shoulders_0.png", "label": "HEAD_AND_SHOULDERS"},
+    {"file": "head_and_shoulders_1.png", "label": "HEAD_AND_SHOULDERS"},
+    {"file": "double_top_0.png", "label": "DOUBLE_TOP"},
+    {"file": "double_top_1.png", "label": "DOUBLE_TOP"},
+    {"file": "double_bottom_0.png", "label": "DOUBLE_BOTTOM"},
+    {"file": "double_bottom_1.png", "label": "DOUBLE_BOTTOM"},
+    {"file": "ascending_flag_0.png", "label": "ASCENDING_FLAG"},
+    {"file": "ascending_flag_1.png", "label": "ASCENDING_FLAG"},
+    {"file": "uptrend_0.png", "label": "UPTREND"},
+    {"file": "uptrend_1.png", "label": "UPTREND"},
+    {"file": "downtrend_0.png", "label": "DOWNTREND"},
+    {"file": "downtrend_1.png", "label": "DOWNTREND"}
+  ]
+}
