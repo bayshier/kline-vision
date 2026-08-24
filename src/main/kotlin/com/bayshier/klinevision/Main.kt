@@ -6,21 +6,39 @@ import com.bayshier.klinevision.render.ChartRenderer
 import java.io.File
 
 /**
- * kline-vision CLI.
+ * kline-vision CLI / MCP server.
  *
  *   eval    — generate the labeled synthetic eval set as PNG + manifest
- *   analyze — render a sample and ask the configured VLM to classify it
+ *   serve   — run as a stdio MCP server (4 tools)
  */
 fun main(args: Array<String>) {
     when (args.firstOrNull() ?: "eval") {
+        "serve" -> serveMcp()
         "eval" -> generateEvalSet(
             outDir = File(args.getOrNull(1) ?: "eval"),
             variants = (args.getOrNull(2)?.toIntOrNull() ?: 3),
         )
         else -> {
-            println("用法: kline-vision eval [输出目录] [每种形态的变体数]")
+            println("用法: kline-vision eval [输出目录] [变体数] | kline-vision serve")
         }
     }
+}
+
+private fun serveMcp() {
+    val mapper = io.modelcontextprotocol.json.jackson3.JacksonMcpJsonMapper(
+        tools.jackson.databind.json.JsonMapper.builder().build(),
+    )
+    io.modelcontextprotocol.server.McpServer.sync(
+        io.modelcontextprotocol.server.transport.StdioServerTransportProvider(mapper),
+    )
+        .serverInfo("kline-vision", "0.1.0")
+        .instructions(
+            "K线形态视觉识别 MCP：渲染K线图并调用视觉大模型识别技术形态。" +
+                "render_synthetic 免 key 演示；analyze_stock 为完整闭环（真实行情→渲染→识别，" +
+                "需 KLINE_VISION_API_KEY）；generate_eval 生成评测集。",
+        )
+        .tools(*com.bayshier.klinevision.server.VisionTools.all().toTypedArray())
+        .build()
 }
 
 private fun generateEvalSet(outDir: File, variants: Int) {
