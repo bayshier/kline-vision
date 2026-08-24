@@ -154,7 +154,7 @@ object VisionTools {
         val limit = ((req.arguments()["limit"] as? Int) ?: 90).coerceIn(30, 250)
 
         val candles = fetcher.fetchDaily(code, limit)
-        if (candles.size < 30) error("K线数据不足: ${candles.size}")
+        if (candles.size < 4) error("K线数据不足: ${candles.size}（次新股至少 4 日）")
 
         val out = File(workDir, "stock_$code.png")
         ChartRenderer.render(candles, "$code · daily", out)
